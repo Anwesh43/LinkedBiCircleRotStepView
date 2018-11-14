@@ -27,7 +27,7 @@ fun Int.getInverse() : Float = 1f / this
 
 fun Float.getScaleFactor() : Float = Math.floor(this / scaleFactor).toFloat()
 
-fun Int.getMirrorMultiplier(k : Float) : Float = this * (1 - k) + k
+fun Int.getMirrorMultiplier(k : Float) : Float = this.getInverse() * (1 - k) + k
 
 fun Float.updateScale(dir : Float, a : Int) : Float = scGap * dir * a.getMirrorMultiplier(getScaleFactor())
 
@@ -88,6 +88,7 @@ class BiCircleRotStepView(ctx : Context) : View(ctx) {
 
         fun update(cb : (Float) -> Unit) {
             val k : Float = scale.updateScale(dir, parts)
+            scale += k 
             Log.d("scale updated by", "$k")
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
