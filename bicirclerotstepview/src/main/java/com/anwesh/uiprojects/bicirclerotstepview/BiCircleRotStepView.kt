@@ -21,6 +21,7 @@ val SIZE_FACTOR : Int = 3
 val scaleFactor : Double = 0.5
 val scGap : Float = 0.05f
 val DELAY : Long = 30
+val DEG_MAX : Float = 90f
 
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.getInverse(), Math.max(0f, this - i * n.getInverse())) * n
 
@@ -52,7 +53,7 @@ fun Canvas.drawBCRSNode(i : Int, scale : Float, paint : Paint) {
     paint.color = Color.parseColor("#0D47A1")
     save()
     translate(gap * (i + 1), h / 2)
-    rotate(180f * sc2)
+    rotate(DEG_MAX * sc2)
     for(j in 0..(parts-1)) {
         val sc : Float = sc1.divideScale(j, parts)
         val degFactor : Int = j.getYFactor()
