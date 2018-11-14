@@ -85,7 +85,7 @@ class BiCircleRotStepView(ctx : Context) : View(ctx) {
     data class State(var scale : Float = 0f, var prevScale : Float = 0f, var dir : Float = 0f) {
 
         fun update(cb : (Float) -> Unit) {
-            val k : Float = scale.updateScale(dir)
+            val k : Float = scale.updateScale(dir, parts)
             Log.d("scale updated by", "$k")
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
@@ -126,8 +126,53 @@ class BiCircleRotStepView(ctx : Context) : View(ctx) {
 
         fun stop() {
             if (animated) {
-                animated = false 
+                animated = false
             }
+        }
+    }
+
+    data class BCRSNode(var i : Int, val state : State = State()) {
+
+        private var next : BCRSNode? = null
+
+        private var prev : BCRSNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (i < nodes - 1) {
+                next = BCRSNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawBCRSNode(i, state.scale, paint)
+            prev?.draw(canvas, paint)
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            state.update {
+                cb(i, it)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : BCRSNode {
+            var curr : BCRSNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
         }
     }
 }
