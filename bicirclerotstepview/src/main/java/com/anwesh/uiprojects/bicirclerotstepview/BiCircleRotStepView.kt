@@ -223,4 +223,12 @@ class BiCircleRotStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+        fun create(activity : Activity) : BiCircleRotStepView {
+            val view : BiCircleRotStepView = BiCircleRotStepView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
