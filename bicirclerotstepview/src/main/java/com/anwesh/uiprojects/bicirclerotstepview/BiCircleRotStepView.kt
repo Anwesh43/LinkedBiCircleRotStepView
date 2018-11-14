@@ -20,6 +20,7 @@ val STROKE_FACTOR : Int = 60
 val SIZE_FACTOR : Int = 3
 val scaleFactor : Double = 0.5
 val scGap : Float = 0.05f
+val DELAY : Long = 30
 
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.getInverse(), Math.max(0f, this - i * n.getInverse())) * n
 
@@ -88,7 +89,7 @@ class BiCircleRotStepView(ctx : Context) : View(ctx) {
 
         fun update(cb : (Float) -> Unit) {
             val k : Float = scale.updateScale(dir, parts)
-            scale += k 
+            scale += k
             Log.d("scale updated by", "$k")
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
@@ -112,7 +113,7 @@ class BiCircleRotStepView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(DELAY)
                     view.invalidate()
                 } catch(ex : Exception) {
 
