@@ -176,7 +176,7 @@ class BiCircleRotStepView(ctx : Context) : View(ctx) {
         }
     }
 
-    data class BiCirclrRotStep(var i : Int) {
+    data class BiCircleRotStep(var i : Int) {
         private var curr : BCRSNode = BCRSNode(0)
 
         private var dir : Int = 1
@@ -196,6 +196,29 @@ class BiCircleRotStepView(ctx : Context) : View(ctx) {
 
         fun startUpdating(cb : () -> Unit) {
             curr.startUpdating(cb)
+        }
+    }
+
+    data class Renderer(var view : BiCircleRotStepView) {
+
+        private val animator : Animator = Animator(view)
+
+        private val bcrs : BiCircleRotStep = BiCircleRotStep(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            bcrs.draw(canvas, paint)
+            animator.animate {
+                bcrs.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            bcrs.startUpdating {
+                animator.start()
+            }
         }
     }
 }
