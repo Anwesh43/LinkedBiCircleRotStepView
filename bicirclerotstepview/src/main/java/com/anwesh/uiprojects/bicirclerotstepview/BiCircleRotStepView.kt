@@ -17,6 +17,18 @@ val nodes : Int = 5
 val parts : Int = 4
 val STROKE_FACTOR : Int = 60
 val SIZE_FACTOR : Int = 3
+val scaleFactor : Double = 0.5
+val scGap : Float = 0.05f
+
+fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.getInverse(), Math.max(0f, this - i * n.getInverse())) * n
+
+fun Int.getInverse() : Float = 1f / this
+
+fun Float.getScaleFactor() : Float = Math.floor(this / scaleFactor).toFloat()
+
+fun Int.getMirrorMultiplier(k : Float) : Float = this * (1 - k) + k
+
+fun Float.updateScale(dir : Float, a : Int) : Float = scGap * dir * a.getMirrorMultiplier(getScaleFactor())
 
 class BiCircleRotStepView(ctx : Context) : View(ctx) {
 
